@@ -47,9 +47,9 @@ def send_message(message: str) -> None:
         "text": message,
         "parse_mode": "HTML"
         })
-
-    if r.status_code != 200:
-        raise Exception("post_text error")
+    
+    # if r.status_code != 200:
+    #     raise Exception("post_text error")
 
 if __name__ == '__main__':
     send_message('test msg')
