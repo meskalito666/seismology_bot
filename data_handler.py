@@ -18,7 +18,7 @@ def check_location(latitude: float, longitude: float, region: str,
     The polygon in this case is a figure outlined by 4 points on the map, 
     including the regions closest to Armenia
 
-    TODO: transform latitude and longitude and use adjasted values to check location
+    TODO: transform latitude and longitude and use adjusted values to check location
     https://en.wikipedia.org/wiki/Mercator_projection
     https://wiki.gis-lab.info/w/Пересчет_координат_из_Lat/Long_в_проекцию_Меркатора_и_обратно#.D0.9A.D0.BE.D0.B4_.D0.BD.D0.B0_Python
     """
@@ -45,7 +45,6 @@ def get_location_name(latitude: float, longitude: float) -> str:
     url = GEOCODE_URL.format(latitude, longitude)
     data = requests.get(url).text
     data = json.loads(data)
-
     output_string = ''
 
     if data['countryName']:
