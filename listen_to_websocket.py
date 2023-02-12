@@ -3,8 +3,8 @@ from tornado.websocket import websocket_connect
 from tornado.ioloop import IOLoop
 from tornado import gen
 from typing import Generator
-from data_handler import check_location
-from send_message import format_string, send_message
+from data_handler import check_location, prepare_msg_for_tg
+from send_message import send_message
 from consts import WEB_SOCKET_URL, PING_INTERVAL, TEST_MODE
 
 
@@ -14,17 +14,16 @@ def processing(message: str) -> None:
         data = json.loads(message)
         info = data['data']['properties']
         info['action'] = data['action']
-        info['location'] = data['data']['geometry']['coordinates']
-        latitude, longitude = info['location'][1], info['location'][0]
+        longitude, latitude, _ = data['data']['geometry']['coordinates']
         
         if TEST_MODE == 'test':
             # send notifications from all over the world (earthquakes happen every ~5 minutes)
-            tg_message = format_string(info)
+            tg_message = prepare_msg_for_tg(latitude, longitude, info)
             send_message(tg_message)
         else:
             # send notifications only from Armenia (and from a small area around)
             if check_location(latitude, longitude, info['flynn_region']):
-                tg_message = format_string(info)
+                tg_message = prepare_msg_for_tg(latitude, longitude, info)
                 send_message(tg_message)
 
     except Exception:
