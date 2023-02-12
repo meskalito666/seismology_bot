@@ -2,7 +2,7 @@ import json
 import pytz
 import requests
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 from shapely.geometry import Point, Polygon
 from consts import GOOGLE_MAP_URL, GEOCODE_URL, polygon_list
 
@@ -62,19 +62,41 @@ def get_location_name(latitude: float, longitude: float) -> str:
     return output_string
 
 
-def get_time() -> str:
-    """
-    get Armenian local time
-    """
+def get_local_time() -> str:
+    
     armenian_tz = pytz.timezone('Asia/Yerevan')
     local_time = datetime.now(tz=armenian_tz).strftime('%d-%m-%Y, %H:%M')
 
     return 'time: ' + local_time + '\n'
 
 
+def prepare_msg_for_tg(latitude: float, longitude: float, info: Dict) -> str:
+    # get type of action
+    if info['action'] == 'create':
+        action = 'New earthquake! \n'
+    elif info['action'] == 'update':
+        action = 'Update. \n'
+    else:
+        action = ''
+    # get magnitude
+    mag = f'magnitude: {info["mag"]} \n'
+    # get depth
+    depth = f'depth: {info["depth"]} \n'
+    # get time from json
+    # time = f'time: {info["time"]} \n'
+    # or get local time 
+    time = get_local_time()
+    # get location
+    lacation_name = get_location_name(latitude, longitude)
+    # get map link
+    map_link = get_map_link(latitude, longitude)
+
+    return action + time + mag + depth + lacation_name + map_link
+
+
 if __name__ == '__main__':
     # print(check_location(41.548973, 43.190972, '', polygon_list))
     # print(get_location_name(39.145481417814864, 46.135839891752056))
-    print(get_time())
+    print(get_local_time())
 
     
