@@ -4,14 +4,14 @@ import requests
 from datetime import datetime
 from typing import List, Dict
 from shapely.geometry import Point, Polygon
-from consts import GOOGLE_MAP_URL, GEOCODE_URL, polygon_list
+from consts import GOOGLE_MAP_URL, GEOCODE_URL, TIMEDIFF_BETWEEN_UPDATES, polygon_list
 
 
 
 def check_location(latitude: float, longitude: float, region: str,
                    polygon: List[List[float]]=polygon_list) -> bool:
     """
-    to check:
+    to check: \n
       1. if 'ARMENIA' in the name of region
       2. if the earthquake is inside the polygon "around" Armenia
     
@@ -29,6 +29,24 @@ def check_location(latitude: float, longitude: float, region: str,
     point = Point([latitude, longitude])
 
     return point.within(polygon) or is_arm
+
+
+def check_time(info: Dict) -> bool:
+    """
+    parse time and check timediff between updates to avoid spam \n
+    info['time'] - time of original earthquake \n
+    info['lastupdate'] - time of aftershock \n
+
+    time format from json: 2023-02-13T23:56:22.4Z
+    """
+    if info['action'] == 'create':  # check if new
+        return True
+    else:  # else check timediff between updates
+        _time = datetime.strptime(info['time'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        _lastupdate = datetime.strptime(info['lastupdate'], "%Y-%m-%dT%H:%M:%S.%fZ")
+        timediff = abs((_lastupdate - _time).total_seconds())
+
+        return timediff > TIMEDIFF_BETWEEN_UPDATES
 
 
 def get_map_link(latitude: float, longitude: float) -> str: 
@@ -97,6 +115,12 @@ def prepare_msg_for_tg(latitude: float, longitude: float, info: Dict) -> str:
 if __name__ == '__main__':
     # print(check_location(41.548973, 43.190972, '', polygon_list))
     # print(get_location_name(39.145481417814864, 46.135839891752056))
+    # info = {
+    #     'action':'upd',
+    #     'time':'2023-02-14T08:19:24.4Z',
+    #     'lastupdate':'2023-02-14T08:25:00.0Z'
+    # }
+    # print(check_time(info))
     print(get_local_time())
 
     
