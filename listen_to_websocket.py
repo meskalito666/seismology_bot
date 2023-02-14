@@ -7,7 +7,7 @@ from typing import Generator
 from data_handler import check_location, check_time, prepare_msg_for_tg
 from send_message import send_message
 from shutdown_alert import shutdown_alert
-from consts import WEB_SOCKET_URL, PING_INTERVAL, TEST_MODE
+from consts import WEB_SOCKET_URL, PING_INTERVAL, TEST_MODE, ADMIN_ID
 
 
 
@@ -38,11 +38,9 @@ def listen(ws) -> Generator:
         while True:
             time_cheker = asyncio.create_task(sa.timer()) #timer started
             message = yield ws.read_message() #listening to socket
-            if message is None:
-                ws = None
-                break
-            processing(message)
-            time_cheker.cancel() # cancel task in order to restart timer 
+            if message:
+                processing(message)
+                time_cheker.cancel() # cancel task in order to restart timer 
 
 
 @gen.coroutine
@@ -61,6 +59,7 @@ if __name__ == '__main__':
     ioloop = IOLoop.instance()
     launch_client()
     try:
+        send_message('service started', ADMIN_ID)
         ioloop.start()
     except KeyboardInterrupt:
         print("Close WebSocket")
