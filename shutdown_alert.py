@@ -8,8 +8,8 @@ class shutdown_alert():
     """
     the context manager sends an alert to ADMIN_ID in case of: \n
         1. error
-        2. if the app terminated without error (e.g. the socket returned None) 
-        3. if the socket is silent 30min
+        2. if the app terminated without an error 
+        3. if the socket is silent for WAIT_FOR_SOCKET sec
     """
     def __init__(self):
         pass
@@ -35,10 +35,10 @@ class shutdown_alert():
     @staticmethod
     async def timer():
         """
-        timer runs each iteration in the main loop \n
-        if the socket does not respond within WAIT_FOR_SOCKET sec - an alert will be sent \n
+        every iteration in the main loop, the timer is started \n
+        if the socket returns None or does not respond within WAIT_FOR_SOCKET sec - an alert will be sent \n
         else - timer will be updated
         """
         await asyncio.sleep(WAIT_FOR_SOCKET)
-        send_message(f'socket is silent more than {WAIT_FOR_SOCKET} sec.', ADMIN_ID)
+        send_message(f'socket returns None or is silent for more than {WAIT_FOR_SOCKET} sec.', ADMIN_ID)
                         
