@@ -33,7 +33,7 @@ def check_location(latitude: float, longitude: float, region: str,
 
 def check_time(info: Dict) -> bool:
     """
-    parse time and check timediff between updates to avoid spam \n
+    parse time and check timediff between earthquake and aftershock to avoid spam \n
     info['time'] - time of original earthquake \n
     info['lastupdate'] - time of aftershock \n
 
@@ -101,7 +101,7 @@ def prepare_msg_for_tg(latitude: float, longitude: float, info: Dict) -> str:
     # get depth
     depth = f'depth: {info["depth"]} \n'
     # get time from json
-    # time = f'time: {info["time"]} \n'
+    # time = f'time: {info["lastupdate"]} \n'
     # or get local time 
     time = get_local_time()
     # get location
