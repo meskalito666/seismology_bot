@@ -5,7 +5,8 @@ import os
 TEST_MODE = os.environ['TEST_MODE'] # should be 'test' if mode ON 
 
 TOKEN_TG_BOT = os.environ['TOKEN_TG_BOT']
-CHANEL_ID = os.environ['CHANEL_ID']
+CHANEL_ID = os.environ['CHANEL_ID'] 
+ADMIN_ID = os.environ['ADMIN_ID'] # to receive a notification in case of shutdown
 
 WEB_SOCKET_URL = 'wss://www.seismicportal.eu/standing_order/websocket'
 TG_API_URL = 'https://api.telegram.org/bot'
@@ -13,6 +14,8 @@ GOOGLE_MAP_URL = 'https://maps.google.com/?q={},{}' # 1st - latitude, 2nd - long
 GEOCODE_URL = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={}&longitude={}&localityLanguage=en'
 
 PING_INTERVAL = 15
+WAIT_FOR_SOCKET = 30*60
+TIMEDIFF_BETWEEN_UPDATES = 15*60
 
 polygon = {
     'top_left':[40.906133, 40.614540], 
