@@ -24,7 +24,7 @@ def processing(message: str) -> None:
             send_message(tg_message)
         else:
             # send notifications only from Armenia (and from a small area around)
-            if check_location(latitude, longitude, info['flynn_region']) and check_time(info):
+            if check_location(latitude, longitude, info['flynn_region']) and check_aftershock(info):
                 tg_message = prepare_msg_for_tg(latitude, longitude, info)
                 send_message(tg_message)
 
