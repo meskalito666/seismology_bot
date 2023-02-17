@@ -31,9 +31,11 @@ def check_location(latitude: float, longitude: float, region: str,
     return point.within(polygon) or is_arm
 
 
-def check_time(info: Dict) -> bool:
+def check_aftershock(info: Dict) -> bool:
     """
     parse time and check timediff between earthquake and aftershock to avoid spam \n
+    aftershocks outside of Armenia will be skipped
+
     info['time'] - time of original earthquake \n
     info['lastupdate'] - time of aftershock \n
 
@@ -41,6 +43,8 @@ def check_time(info: Dict) -> bool:
     """
     if info['action'] == 'create':  # check if new
         return True
+    elif 'ARMENIA' not in info['flynn_region'].upper(): # skip if aftershock is outside of Armenia 
+        return False
     else:  # else check timediff between updates
         _time = datetime.strptime(info['time'], "%Y-%m-%dT%H:%M:%S.%fZ")
         _lastupdate = datetime.strptime(info['lastupdate'], "%Y-%m-%dT%H:%M:%S.%fZ")
