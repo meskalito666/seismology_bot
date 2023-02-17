@@ -53,7 +53,7 @@ def get_map_link(latitude: float, longitude: float) -> str:
 
     url = GOOGLE_MAP_URL.format(latitude, longitude)
     Earth_emoji = u'\U0001F30F'
-    output_string = Earth_emoji + f'<a href="{url}">map</a>'
+    output_string = f'<a href="{url}">{Earth_emoji}map</a>'
 
     return output_string
 
@@ -66,7 +66,7 @@ def get_location_name(latitude: float, longitude: float) -> str:
     output_string = ''
 
     if data['countryName']:
-        output_string += f"country: {data['countryName']} \n"
+        output_string += f"country: #{data['countryName']} \n"
 
     if data['principalSubdivision']:
         output_string += f"province: {data['principalSubdivision']} \n" 
@@ -93,7 +93,7 @@ def prepare_msg_for_tg(latitude: float, longitude: float, info: Dict) -> str:
     if info['action'] == 'create':
         action = 'New earthquake! \n'
     elif info['action'] == 'update':
-        action = 'Update. \n'
+        action = 'Aftershock. \n'
     else:
         action = ''
     # get magnitude
