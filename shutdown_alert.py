@@ -40,5 +40,5 @@ class shutdown_alert():
         else - timer will be updated
         """
         await asyncio.sleep(WAIT_FOR_SOCKET)
-        send_message(f'socket returns None or is silent for more than {WAIT_FOR_SOCKET} sec.', ADMIN_ID)
+        send_message(f'socket returns None or is silent for more than {WAIT_FOR_SOCKET/60} min.', ADMIN_ID)
                         
