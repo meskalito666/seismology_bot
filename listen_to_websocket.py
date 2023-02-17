@@ -4,7 +4,7 @@ from tornado.websocket import websocket_connect
 from tornado.ioloop import IOLoop
 from tornado import gen
 from typing import Generator
-from data_handler import check_location, check_time, prepare_msg_for_tg
+from data_handler import check_location, check_aftershock, prepare_msg_for_tg
 from send_message import send_message
 from shutdown_alert import shutdown_alert
 from consts import WEB_SOCKET_URL, PING_INTERVAL, TEST_MODE, ADMIN_ID
