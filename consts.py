@@ -16,6 +16,7 @@ GEOCODE_URL = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude
 PING_INTERVAL = 15
 WAIT_FOR_SOCKET = 30*60
 TIMEDIFF_BETWEEN_UPDATES = 15*60
+MAGNITUDE_THRESHOLD = 2.9
 
 polygon = {
     'top_left':[40.906133, 40.614540], 

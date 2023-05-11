@@ -4,7 +4,9 @@ import requests
 from datetime import datetime
 from typing import List, Dict
 from shapely.geometry import Point, Polygon
-from consts import GOOGLE_MAP_URL, GEOCODE_URL, TIMEDIFF_BETWEEN_UPDATES, polygon_list
+from consts import (
+    GOOGLE_MAP_URL, GEOCODE_URL, TIMEDIFF_BETWEEN_UPDATES, 
+    MAGNITUDE_THRESHOLD, polygon_list)
 
 
 
@@ -51,6 +53,18 @@ def check_aftershock(info: Dict) -> bool:
         timediff = abs((_lastupdate - _time).total_seconds())
 
         return timediff > TIMEDIFF_BETWEEN_UPDATES
+    
+
+def check_magnitude(info: Dict, threshold: float=MAGNITUDE_THRESHOLD) -> bool:
+    """
+    check magnitude to avoid spam
+    """
+    if 'ARMENIA' in info['flynn_region'].upper(): # anyway show a notification if earthquake in Armenia 
+        return True
+    elif info['mag'] >= threshold:
+        return True
+    else:
+        return False
 
 
 def get_map_link(latitude: float, longitude: float) -> str: 

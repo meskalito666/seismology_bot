@@ -4,7 +4,7 @@ from tornado.websocket import websocket_connect
 from tornado.ioloop import IOLoop
 from tornado import gen
 from typing import Generator
-from data_handler import check_location, check_aftershock, prepare_msg_for_tg
+from data_handler import check_location, check_aftershock, check_magnitude, prepare_msg_for_tg
 from send_message import send_message
 from shutdown_alert import shutdown_alert
 from consts import WEB_SOCKET_URL, PING_INTERVAL, TEST_MODE, ADMIN_ID
@@ -24,7 +24,11 @@ def processing(message: str) -> None:
             send_message(tg_message)
         else:
             # send notifications only from Armenia (and from a small area around)
-            if check_location(latitude, longitude, info['flynn_region']) and check_aftershock(info):
+            if (
+                check_location(latitude, longitude, info['flynn_region']) 
+                and check_aftershock(info) 
+                and check_magnitude(info)
+                ):
                 tg_message = prepare_msg_for_tg(latitude, longitude, info)
                 send_message(tg_message)
 
